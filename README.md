@@ -16,6 +16,7 @@ The language will look like most other C style languages with a few key differen
 
 OOP (Object Oriented Programming) languages come with a few key language features which Beanstalk will also implement. These features are Classes, functions, for loops, and if statements.
 Typically in most languages they would be defined something like this:
+
 class Object;\
 int functionName {};\
 for(int i = 0; i < conditionall; i++);\
