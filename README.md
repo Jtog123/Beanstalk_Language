@@ -10,5 +10,5 @@ Beanstalk in a general purpose programming language. The creation of this langua
 
 The inspiration for the name comes from the old English fairy tale "Jack and the Beanstalk".
 
-![image alt](https://github.com/Jtog123/Beanstalk/blob/3a90e80d5877af6dba166c91c898c4221f4d1f7a/JackBeanstalkGiant.jpg =100x20)
+![image alt](https://github.com/Jtog123/Beanstalk/blob/3a90e80d5877af6dba166c91c898c4221f4d1f7a/JackBeanstalkGiant.jpg)
 
