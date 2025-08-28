@@ -15,12 +15,11 @@ The inspiration for the name comes from the old English fairy tale "Jack and the
 The language will look like most other C style languages with a few key differences implemented for pure differentiation.
 
 OOP (Object Oriented Programming) languages come with a few key language features which Beanstalk will also implement. These features are Classes, functions, for loops, and if statements.
-Typically in most languages they would be defined something like this
-
-class Object\
-int functionName {}\
-for(int i = 0; i < conditionall; i++)\
-if(conditional)\
+Typically in most languages they would be defined something like this:
+class Object;\
+int functionName {};\
+for(int i = 0; i < conditionall; i++);\
+if(conditional);\
 
 Beanstalk will maintain the functionality of these language features and only adjust the syntax
 Fees = Classes\
