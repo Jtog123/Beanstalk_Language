@@ -24,7 +24,7 @@ if(conditional);
 
 Beanstalk will maintain the functionality of these language features and only adjust the syntax
 
-Fees = Classes\
+Fee = Class\Object
 fi = if statements\
 fo = for loops\
 fum = functions
