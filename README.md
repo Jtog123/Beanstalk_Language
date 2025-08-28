@@ -12,6 +12,8 @@ The inspiration for the name comes from the old English fairy tale "Jack and the
 
 <img src="https://github.com/Jtog123/Beanstalk/blob/3a90e80d5877af6dba166c91c898c4221f4d1f7a/JackBeanstalkGiant.jpg" width="400" height="500">
 
+# Functionality
+
 The language will look like most other C style languages with a few key differences implemented for pure differentiation.
 
 OOP (Object Oriented Programming) languages come with a few key language features which Beanstalk will also implement. These features are Classes, functions, for loops, and if statements.
