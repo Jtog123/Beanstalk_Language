@@ -20,7 +20,7 @@ Typically in most languages they would be defined something like this:
 class Object;\
 int functionName {};\
 for(int i = 0; i < conditionall; i++);\
-if(conditional);\
+if(conditional);
 
 Beanstalk will maintain the functionality of these language features and only adjust the syntax
 Fees = Classes\
