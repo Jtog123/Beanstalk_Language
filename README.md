@@ -6,7 +6,7 @@ Be he alive, or be he dead,\
 I’ll grind his bones to make my bread.”
 
 
-Beanstalk in a general purpose programming language. The creation of this language serves as an excerise in trying to understand the nuts and bolts of programming language design and creation.
+Beanstalk in a general purpose interpreted programming language. The creation of this language serves as an excerise in trying to understand the nuts and bolts of programming language design and creation.
 
 The inspiration for the name comes from the old English fairy tale "Jack and the Beanstalk". The inspiration for the idea comes from Robert Nystrom's book "Crafting Interpreters" which will also serve as the guide to constructing this language.
 
@@ -31,7 +31,13 @@ fi = if statements\
 fo = for loops\
 fum = functions
 
+For example...
+
 # How it will function
 compiler -> bytecode -> Virtual Machine execution
 
+Bytecode over Machine Code
+Machine code is much faster, but it's also architecture dependent. In other words if we wanted Beanstalk to compile directly to machine code on both Windows and Mac I would need seperate builds for Intel and ARM chips. 
+
+By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it during runtime. Although the code generated won't be as fast as machine code we avoid the headache of cross compiling on different architectures, while also achieving portability.
 
