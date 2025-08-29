@@ -26,7 +26,7 @@ if(conditional);
 
 Beanstalk will maintain the functionality of these language features and only adjust the syntax
 
-Fee = Class\Object\
+Fee = Class/Object\
 fi = if statements\
 fo = for loops\
 fum = functions
@@ -36,8 +36,13 @@ For example...
 # How it will function
 compiler -> bytecode -> Virtual Machine execution
 
-Bytecode over Machine Code
+Bytecode over Machine Code\
 Machine code is much faster, but it's also architecture dependent. In other words if we wanted Beanstalk to compile directly to machine code on both Windows and Mac I would need seperate builds for Intel and ARM chips. 
 
 By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it during runtime. Although the code generated won't be as fast as machine code we avoid the headache of cross compiling on different architectures, while also achieving portability.
+
+What exactly is Bytecode?\
+Bytecode is intermediary code designed to run on virtual machines rather than directly onto CPU's. Structurally it somewhat resembles machine code. It's a sequence of binary instructions, but its much simpler and higher level than any real chip. To make the bytecode instructions execute we will need to write a piece of software that interprets the bytecode one instruction at a time. This piece of software is the virtual machine.
+
+
 
