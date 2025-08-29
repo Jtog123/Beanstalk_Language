@@ -44,5 +44,6 @@ By using bytecode we avoid seperate builds and generate an architecture neutral 
 What exactly is Bytecode?\
 Bytecode is intermediary code designed to run on virtual machines rather than directly onto CPU's. Structurally it somewhat resembles machine code. It's a sequence of binary instructions, but its much simpler and higher level than any real chip. To make the bytecode instructions execute we will need to write a piece of software that interprets the bytecode one instruction at a time. This piece of software is the virtual machine.
 
+The virtual machine layer is what will make Beanstalk slower, but allow it to run on whatever hardware we would like.
 
 
