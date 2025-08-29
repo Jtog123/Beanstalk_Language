@@ -46,4 +46,8 @@ Bytecode is intermediary code designed to run on virtual machines rather than di
 
 The virtual machine layer is what will make Beanstalk slower, but allow it to run on whatever hardware we would like.
 
+TLDR\
+In short I'm writing a compiler that generates bytecode instructions, and a virtual machine which reads/runs those bytecode instructions rather than the CPU.
+
+
 
