@@ -1,9 +1,22 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
-#include <cstdint>
+#include "commonlibs.h"
+#include "memory.h"
 
 using namespace std;
+
+/*
+                            --------------------- OPCODE --------------------- 
+What instruction are we dealing with?
+*/
+
+
+enum OpCode {
+    OP_RETURN,
+};
+
+
 
 /*
                             --------------------- CHUNK ---------------------
@@ -21,7 +34,35 @@ In CPP I will probably opt for move operations over making copies, since moves a
 class Chunk {
 
     public:
-        Chunk(int count, int capacity, uint8_t* code);
+        
+        Chunk();
+
+        //Chunk(int count, int capacity, uint8_t* code);
+
+        ~Chunk();
+
+        // Write to a piece of bytecode, functions like a push_back
+        void writeChunk(uint8_t byte);
+        void freeChunk();
+
+        int getChunkCount();
+        int getChunkCapacity();
+        uint8_t* getChunkCode();
+
+    
+    private:
+    /* WE ARE ESSENTIALLY BUILDING A DYNAMIC ARRAY HOW CAN I CPPIFY THIS CODE??????*/
+    
+        //int GROW_CAPACITY(int oldCapacity);
+        //void* GROW_ARRAY(decltype);
+        //void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+
+    
+    private:
+        int count;
+        int capacity;
+        uint8_t* code;
+
 
 };
 

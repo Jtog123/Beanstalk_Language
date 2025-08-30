@@ -1,8 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -O2
 
-# Just list all your cpp files here:
-SOURCES = main.cpp
+SOURCES = main.cpp chunk.cpp memory.cpp debug.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 EXEC = program
 
