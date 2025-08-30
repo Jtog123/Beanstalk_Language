@@ -51,11 +51,6 @@ class Chunk {
 
     
     private:
-    /* WE ARE ESSENTIALLY BUILDING A DYNAMIC ARRAY HOW CAN I CPPIFY THIS CODE??????*/
-    
-        //int GROW_CAPACITY(int oldCapacity);
-        //void* GROW_ARRAY(decltype);
-        //void* reallocate(void* pointer, size_t oldSize, size_t newSize);
 
     
     private:

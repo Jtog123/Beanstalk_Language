@@ -5,7 +5,7 @@ Chunk::Chunk() : count(0), capacity(0), code(nullptr) {
 
 }
 
-
+//use this? to be more succinct
 void Chunk::writeChunk(uint8_t byte) {
     if(capacity < count + 1) {
         int oldCapacity = capacity;
@@ -28,6 +28,8 @@ void Chunk::freeChunk() {
 Chunk::~Chunk() {
 
 }
+
+
 
 int Chunk::getChunkCount() {
     return count;
