@@ -2,7 +2,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    cout << "Hello" << endl;
+    cout << "Hello hehe" << endl;
     return 0;
 }
 
