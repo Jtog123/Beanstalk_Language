@@ -11,7 +11,7 @@
 
 /*
 Macros are handled by preprocessor before compilation
-Macros ONLY substitute text, the preprocessor does NOT know about c++ syntax, its just pastes text
+Macros ONLY substitute text, the preprocessor does NOT know about C syntax, its just pastes text
 The book uses Macros like this:
 
 #define GROW_ARRAY(type, pointer, oldCount, newCount) \
@@ -26,7 +26,13 @@ Macros wil be used as I need to reuse them to dynamically create different types
     ((capacity) < 8 ? 8 : (capacity) * 2)
 
 
-/*pass a type make it a pointer, pass the code to pointer, pass the old capacity of elements, pass the new capacity */
+/*
+Call the function reallocate pass the Chunks code, its old capacity, and its new capacity 
+Reallocate returns a void pointer upon returning from the call to reallocate, GROW_ARRAY casts the pointer to the given type
+for ex. unit8_t*
+
+uint8_t sizeof(type) returns 1 byte 
+*/
 #define GROW_ARRAY(type, pointer, oldCount, newCount) \
     (type*)reallocate(pointer, sizeof(type) * (oldCount), sizeof(type) * (newCount))
 

@@ -4,14 +4,11 @@
 #include "commonlibs.h"
 #include "memory.h"
 
-using namespace std;
 
 /*
                             --------------------- OPCODE --------------------- 
 What instruction are we dealing with?
 */
-
-
 enum OpCode {
     OP_RETURN,
 };
@@ -27,38 +24,20 @@ It will contain a count of the number of instructions.
 It will contain a capacity, or the current maximum amount of instructions it can currently hold
 It will contain an array (pointer) to uint8_t type, which will store contiguous blocks of our bytecode instructions ex. 00000001
 
-Chunks will be dynamically doubled in size if the capacity < count + 1, functioning pretty much like a standard vector.
-In CPP I will probably opt for move operations over making copies, since moves are typically more efficient.
+Chunks will be dynamically doubled in size if the capacity < count + 1, functioning kind of like a vector in CPP.
 */
 
-class Chunk {
 
-    public:
-        
-        Chunk();
+//Define an alias for the Struct
+typedef struct {
+    int count;
+    int capacity;
+    uint8_t* code;
 
-        //Chunk(int count, int capacity, uint8_t* code);
+} Chunk;
 
-        ~Chunk();
-
-        // Write to a piece of bytecode, functions like a push_back
-        void writeChunk(uint8_t byte);
-        void freeChunk();
-
-        int getChunkCount();
-        int getChunkCapacity();
-        uint8_t* getChunkCode();
-
-    
-    private:
-
-    
-    private:
-        int count;
-        int capacity;
-        uint8_t* code;
-
-
-};
+void initChunk(Chunk* chunk);
+void writeChunk(Chunk* chunk, uint8_t byte);
+void freeChunk(Chunk* chunk);
 
 #endif

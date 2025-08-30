@@ -1,17 +1,21 @@
-CXX = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -O2
+# C compiler
+CC = gcc
+CFLAGS = -std=c17 -Wall -Wextra -O2
 
-SOURCES = main.cpp chunk.cpp memory.cpp debug.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
+# source files
+SOURCES = main.c chunk.c memory.c debug.c
+OBJECTS = $(SOURCES:.c=.o)
 EXEC = program
 
 all: $(EXEC)
 
+# Link object files into executable
 $(EXEC): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Compile each .c file into .o
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJECTS) $(EXEC)
