@@ -7,6 +7,9 @@ void initChunk(Chunk* chunk) {
     chunk->capacity = 0;
     chunk->code = NULL;
 
+    //init the constants of the Chunk
+    initValueArray(&chunk->constants);
+
 }
 
 void writeChunk(Chunk* chunk, uint8_t byte) {
@@ -28,9 +31,19 @@ void writeChunk(Chunk* chunk, uint8_t byte) {
 
 }
 
+int addConstant(Chunk* chunk, Value value) {
+    writeValueArray(&chunk->constants, value);
+    
+    //return the index of the value we just added in the value array;
+    return chunk->constants.count - 1;
+}
+
 void freeChunk(Chunk* chunk) {
     // passed in newSize as 0 which will releease the memory on the heap and returns NULL
     FREE_ARRAY(uint8_t, chunk->code, chunk->capacity);
+
+    //also free the value array
+    freeValueArray(&chunk->constants);
 
     //zero out all of the memebers
     initChunk(chunk);

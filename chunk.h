@@ -3,6 +3,7 @@
 
 #include "commonlibs.h"
 #include "memory.h"
+#include "value.h"
 
 
 /*
@@ -10,6 +11,7 @@
 What instruction are we dealing with?
 */
 enum OpCode {
+    OP_CONSTANT,
     OP_RETURN,
 };
 
@@ -34,10 +36,14 @@ typedef struct {
     int capacity;
     uint8_t* code;
 
+    //store the constant values for each Chunk
+    ValueArray constants;
+
 } Chunk;
 
 void initChunk(Chunk* chunk);
 void writeChunk(Chunk* chunk, uint8_t byte);
+int addConstant(Chunk* chunk, Value value);
 void freeChunk(Chunk* chunk);
 
 #endif
