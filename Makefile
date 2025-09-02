@@ -1,6 +1,6 @@
 # C compiler
 CC = clang
-CFLAGS = -std=c99 -Wall -Wextra -O2
+CFLAGS = -std=c99 -Wall -Wextra -g
 
 # source files
 SOURCES = main.c chunk.c memory.c debug.c
