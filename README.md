@@ -1,4 +1,4 @@
-# Beanstalk
+# Beanstalkv - A General Purpose Programming Language
 
 “Fee-fi-fo-fum,\
 I smell the blood of an Englishman.\
