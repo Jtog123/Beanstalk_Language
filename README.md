@@ -70,7 +70,7 @@ fi(a > b){\
 }
 
 # How it will function
-Compiler **GENERATES** Bytecode **FED TO** Virtual Machine
+Compiler **GENERATES** Bytecode. The Bytecode will be **FED TO** Virtual Machine
 
 **The Compiler:**\
 Will probably built with 2 seperate components the Scanner and the Parser.\
