@@ -5,16 +5,42 @@ I smell the blood of an Englishman.\
 Be he alive, or be he dead,\
 I’ll grind his bones to make my bread.”
 
-
-Beanstalk in a general purpose interpreted programming language. The creation of this language serves as an excerise in trying to understand the nuts and bolts of programming language design and creation.
-
-The inspiration for the name comes from the old English fairy tale "Jack and the Beanstalk". The inspiration for the idea comes from Robert Nystrom's book "Crafting Interpreters" which will also serve as the guide to constructing this language.
-
 <img src="https://github.com/Jtog123/Beanstalk/blob/3a90e80d5877af6dba166c91c898c4221f4d1f7a/JackBeanstalkGiant.jpg" width="400" height="500">
 
-# How it will look
+#Overview
 
-The language will look like most other C style languages with a few key differences implemented for pure differentiation.
+Beanstalk will be a general purpose, dynamically typed OOP language written in C. It will contain most modern language features, like functions and classes. Some syntax will differ from most modern languages for pure differentiation. 
+
+#Motivation and Purpose
+
+My motivation for the project stemmed from wanting a better understanding of how programming languages work under the hood. Most modern languages are highly abstracted, and while abstractions come with many benefits to programmers, I believe abstractions can make it harder to grasp your computer science fundamentals. Fundamentals like understanding memory management or how instructions are being executed.
+
+The purpose of the project is to build a language from scratch. By building out the language features I take for granted one by one I hope to solidify my understanding of how they work.
+
+The inspiration for the name comes from the old English fairy tale "Jack and the Beanstalk".
+
+#Background and Research
+
+Some of my background on this subject comes from a compilers class I took here at Marywood. Our class built out a Scanner and a Parser for a small instruction set. So I have a very basic understanding of how languages work. 
+
+My research and guide to writing Beanstalk will come mostly from a book called “Crafting Interpreters” by Robert Nystrom. I will also be referencing a book on the C language by Brian Kernighan and Dennis Ritchie. As well as general C documentation.
+
+#Proposed Tools and Technologies
+
+Pure C and github. NO DEPENDENCIES. 
+
+#Planned features and Functionality
+
+1. Dynamically typed Values: Ints, Doubles, etc
+2. Strings
+3. Global Variables
+4. Local Variables
+5. If (fi) statements, while loops, for (fo) statements
+6. Functions (Fum)
+7. Classes (Fee)
+8. Garbage Collection?
+
+The language will look like most other C style languages with a few minor differences implemented for pure differentiation.
 
 OOP (Object Oriented Programming) languages come with a few key language features which Beanstalk will also implement. These features are Classes, functions, for loops, and if statements.
 Typically in most languages they would be defined something like this:
@@ -24,17 +50,36 @@ int functionName {};\
 for(int i = 0; i < conditionall; i++);\
 if(conditional);
 
-Beanstalk will maintain the functionality of these language features and only adjust the syntax
+Beanstalk will maintain the functionality of these features, but adjust the syntax
 
 Fee = Class/Object\
 fi = if statements\
 fo = for loops\
 fum = functions
 
-For example...
+Like the Giant from Jack and the Beanstalk.
+
+Some snippets might look something like
+
+fum add(var a, var b) {\
+  return a + b;\
+}
+
+fi(a > b){\
+  //do something
+}
 
 # How it will function
-compiler -> bytecode -> Virtual Machine execution
+Compiler **GENERATES** Bytecode **FED TO** Virtual Machine
+
+**The Compiler:**\
+Will probably built with 2 seperate components the Scanner and the Parser.\
+The Scanner will form the Tokens, the Parser will consume them and generate bytecode instructions and then feed them to the Virtual Machine.
+
+**The Virtual Machine:**\
+
+
+
 
 Bytecode over Machine Code\
 Machine code is much faster, but it's also architecture dependent. In other words if we wanted Beanstalk to compile directly to machine code on both Windows and Mac I would need seperate builds for Intel and ARM chips. 
