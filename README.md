@@ -65,12 +65,12 @@ fum add(var a, var b) {\
   return a + b;\
 }
 
-fi(a > b){\
+fi(a > b){
   //do something
 }
 
 # How it will function
-Compiler **GENERATES** Bytecode. The Bytecode will be **FED TO** Virtual Machine
+Compiler **GENERATES** Bytecode. The Bytecode will be **FED TO** the Virtual Machine
 
 **The Compiler:**\
 Will probably built with 2 seperate components a Scanner and a Parser.
@@ -80,40 +80,30 @@ The Scanner will form the Tokens, the Parser will consume them and generate byte
 A virtual machine is essentially a CPU written at the software level. To keep Beanstalk architecture independent we need to write a basic emualtor that understands Beanstalks instruction set.
 The virtual machine will contain an instruction pointer and perfrom the basic duties of a real CPU. It will **fetch an instruction**,**decode said instruction**, then **execute said instruction** . Repeat.
 
-
-
-Bytecode over Machine Code\
+**Bytecode over Machine Code:**\
 Machine code is much faster, but it's also architecture dependent. In other words if we wanted Beanstalk to compile directly to machine code on both Windows and Mac I would need seperate builds for Intel and ARM chips. 
 
-By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it during runtime. Although the code generated won't be as fast as machine code we avoid the headache of cross compiling on different architectures, while also achieving portability.
+By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it. Although the code generated won't be as fast as machine code we avoid the headache of cross compiling on different architectures, while also achieving portability.
 
-What exactly is Bytecode?\
-Bytecode is intermediary code designed to run on virtual machines rather than directly onto CPU's. Structurally it somewhat resembles machine code. It's a sequence of binary instructions, but its much simpler and higher level than any real chip. To make the bytecode instructions execute we will need to write a piece of software that interprets the bytecode one instruction at a time. This piece of software is the virtual machine.
+You can think of the Bytecode as instructions for the Virtual Machine. They tell the virtual machine what operations to perform when we encounter a certain instruction.
+For example if the virtual machine reads in an instruction OP_RETURN. The virtual machine will know that this means its time to return from a function, and it will execute that behaviour. Byetcode can also be more formally known as an **intermediate representation**.
 
-The virtual machine layer is what will make Beanstalk slower, but allow it to run on whatever hardware we would like.
+# Project Scope and Limitations
 
-TLDR\
-In short I'm writing a compiler that generates bytecode instructions, and a virtual machine which reads/runs those bytecode instructions rather than the CPU.
+May not implement garbage collection, entirely time dependent. It will be a dynamically typed language so no declaring explicit types like Ints or doubles, data types will instead be inferred by the compiler.
 
-Specs:
-Background and Research: The creation of the Beanstalk language will rely on a couple different references. The first and primary piece of reference material will be “Crafting Interpreters” by Robert Nystrom. From this book I hope to learn about generating bytecode, creating a virtual machine, and learning the nuts and bolts of memory management. From a past compilers class I have some familiarity with basic lexing and parsing for a toy instruction set called ILOC, I may also be referencing that code for this project.
-The second piece(s) of reference material will be “The C Programming language” by Brian Kernighan and Dennis Ritchie, and just C documentation in general. I took an Operating Systems class where we programmed mostly in C, but it’s not my strongest language, so I will need to be referencing documentation.
-Proposed Tools and Technology: Plain C, Git for version control.
-Features and Functionality: As mentioned previously there will be syntax differences created for pure differentiation. 
-Fee = Classes, fi = if statements, fo = for loops, fum = functions
-A minimum working version of Beanstalk will hopefully look something like a baby version of Python. 
-Variables (Local and global) are a must, loops are a must, strings are a must, conditional statements are a most, functions are a must. I hope to have time to also implement Classes. I also believe the book covers garbage collection which I would love to learn time permitting. If I’m able to do the garbage collection I would like to keep extending and optimising the language but for now any features besides the ones I said are a must I will have to leave undefined.
-Scopes and Limitations: May not implement garbage collection, entirely time dependent. It will be a dynamically typed language so no declaring explicit types like Ints or doubles, data types will instead be inferred by the compiler. 
-Timeline:
-Hadn’t really thought about this I may get a lot done one day, and get stuck on a difficult concept the next. I will say
-Week 1-2:  Build the underlying Chunk data structures needed to hold instructions.
-Week 2-4: Book builds the VM before the lexer, I would like to go very slow through this part.
-Week 4-5: Build the lexer, have previous experience with this, can probably move faster.
-Week 5-6: Hope to be correctly parsing basic expressions by this point.
-Week 6-7: Implementing string, local variables, and global variables by this point.
-Week 7-9 if (fi) statements, While statements, (fo) for statements, also (fum) functions hopefully.
-Week 9- will update this as I go
-Success Criteria: At a minimum Beanstalk should support Beanstalk supports variables, arithmetic, conditionals, loops, and basic functions, and runs in a VM that executes its bytecode (Exactly what you said). Ideally though it supports even more.
+# Timeline and Milestones
+
+Week 1 - 2:  Build the underlying Chunk data structures needed to hold instructions.
+Week 2 - 4: Book builds the VM before the lexer, testing hardcoded instructions.
+Week 4 - 5: Building the scanner.
+Week 5 - 6: Parsing basic expressions. More dynamic instruction testing.
+Week 6 - 7: Implementing string, local variables, and global variables by this point.
+Week 7 - 9 if (fi) statements, While statements, (fo) for statements, also (fum) functions hopefully.
+Week 9 - Will update this as I go.
+
+# Success Criteria
+At a minimum Beanstalk should support variables, arithmetic, conditionals, loops, and basic functions, and runs in a VM that executes its bytecode (Exactly what you said). Ideally the language should work to the point where you could write a small program in it.
 
 
 
