@@ -7,11 +7,11 @@ I’ll grind his bones to make my bread.”
 
 <img src="https://github.com/Jtog123/Beanstalk/blob/3a90e80d5877af6dba166c91c898c4221f4d1f7a/JackBeanstalkGiant.jpg" width="400" height="500">
 
-#Overview
+# Overview
 
 Beanstalk will be a general purpose, dynamically typed OOP language written in C. It will contain most modern language features, like functions and classes. Some syntax will differ from most modern languages for pure differentiation. 
 
-#Motivation and Purpose
+# Motivation and Purpose
 
 My motivation for the project stemmed from wanting a better understanding of how programming languages work under the hood. Most modern languages are highly abstracted, and while abstractions come with many benefits to programmers, I believe abstractions can make it harder to grasp your computer science fundamentals. Fundamentals like understanding memory management or how instructions are being executed.
 
@@ -19,17 +19,17 @@ The purpose of the project is to build a language from scratch. By building out 
 
 The inspiration for the name comes from the old English fairy tale "Jack and the Beanstalk".
 
-#Background and Research
+# Background and Research
 
 Some of my background on this subject comes from a compilers class I took here at Marywood. Our class built out a Scanner and a Parser for a small instruction set. So I have a very basic understanding of how languages work. 
 
 My research and guide to writing Beanstalk will come mostly from a book called “Crafting Interpreters” by Robert Nystrom. I will also be referencing a book on the C language by Brian Kernighan and Dennis Ritchie. As well as general C documentation.
 
-#Proposed Tools and Technologies
+# Proposed Tools and Technologies
 
 Pure C and github. NO DEPENDENCIES. 
 
-#Planned features and Functionality
+# Planned features and Functionality
 
 1. Dynamically typed Values: Ints, Doubles, etc
 2. Strings
