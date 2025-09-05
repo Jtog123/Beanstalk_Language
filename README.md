@@ -62,7 +62,7 @@ Like the Giant from Jack and the Beanstalk.
 Some snippets might look something like
 
 fum add(var a, var b) {\
-  return a + b;\
+&nbspreturn a + b;\
 }
 
 fi(a > b){
@@ -94,12 +94,12 @@ May not implement garbage collection, entirely time dependent. It will be a dyna
 
 # Timeline and Milestones
 
-Week 1 - 2:  Build the underlying Chunk data structures needed to hold instructions.
-Week 2 - 4: Book builds the VM before the lexer, testing hardcoded instructions.
-Week 4 - 5: Building the scanner.
-Week 5 - 6: Parsing basic expressions. More dynamic instruction testing.
-Week 6 - 7: Implementing string, local variables, and global variables by this point.
-Week 7 - 9 if (fi) statements, While statements, (fo) for statements, also (fum) functions hopefully.
+Week 1 - 2:  Build the underlying Chunk data structures needed to hold instructions.\
+Week 2 - 4: Book builds the VM before the lexer, testing hardcoded instructions.\
+Week 4 - 5: Building the scanner.\
+Week 5 - 6: Parsing basic expressions. More dynamic instruction testing.\
+Week 6 - 7: Implementing string, local variables, and global variables by this point.\
+Week 7 - 9 if (fi) statements, While statements, (fo) for statements, also (fum) functions hopefully.\
 Week 9 - Will update this as I go.
 
 # Success Criteria
