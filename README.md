@@ -13,7 +13,7 @@ Beanstalk will be a general purpose, dynamically typed OOP language written in C
 
 # Motivation and Purpose
 
-My motivation for the project stemmed from wanting a better understanding of how programming languages work under the hood. Most modern languages are highly abstracted, and while abstractions come with many benefits to programmers, I believe abstractions can make it harder to grasp your computer science fundamentals. Fundamentals like understanding memory management or how instructions are being executed.
+My motivation for the project stemmed from wanting a better understanding of how programming languages work under the hood. Most modern languages are highly abstracted, and while abstractions come with many benefits to programmers, I believe abstractions can make it harder to grasp your computer science fundamentals. Fundamentals like understanding memory management or how our programs are actually running.
 
 The purpose of the project is to build a language from scratch. By building out the language features I take for granted one by one I hope to solidify my understanding of how they work.
 
