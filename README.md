@@ -73,11 +73,12 @@ fi(a > b){\
 Compiler **GENERATES** Bytecode. The Bytecode will be **FED TO** Virtual Machine
 
 **The Compiler:**\
-Will probably built with 2 seperate components the Scanner and the Parser.\
+Will probably built with 2 seperate components a Scanner and a Parser.
 The Scanner will form the Tokens, the Parser will consume them and generate bytecode instructions and then feed them to the Virtual Machine.
 
 **The Virtual Machine:**\
-
+A virtual machine is essentially a CPU written at the software level. To keep Beanstalk architecture independent we need to write a basic emualtor that understands Beanstalks instruction set.
+The virtual machine will contain an instruction pointer and perfrom the basic duties of a real CPU. It will **fetch an instruction**,**decode said instruction**, then **execute said instruction** . Repeat.
 
 
 
