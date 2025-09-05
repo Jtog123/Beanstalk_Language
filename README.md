@@ -62,7 +62,7 @@ Like the Giant from Jack and the Beanstalk.
 Some snippets might look something like
 
 fum add(var a, var b) {\
-&nbspreturn a + b;\
+&nbsp;return a + b;\
 }
 
 fi(a > b){
