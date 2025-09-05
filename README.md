@@ -9,7 +9,7 @@ I’ll grind his bones to make my bread.”
 
 # Overview
 
-Beanstalk will be a general purpose, dynamically typed OOP language written in C. It will contain most modern language features, like functions and classes. Some syntax will differ from most modern languages for pure differentiation. 
+Beanstalk will be a general purpose, dynamically typed OOP language written in C. The language is also interpreted, meaning all instructions are executed one by one as the program is running. It will contain most modern language features, like functions and classes. Some syntax will differ from most modern languages for pure differentiation. 
 
 # Motivation and Purpose
 
@@ -103,7 +103,7 @@ Week 7 - 9 if (fi) statements, While statements, (fo) for statements, also (fum)
 Week 9 - Will update this as I go.
 
 # Success Criteria
-At a minimum Beanstalk should support variables, arithmetic, conditionals, loops, and basic functions, and runs in a VM that executes its bytecode (Exactly what you said). Ideally the language should work to the point where you could write a small program in it.
+At a minimum Beanstalk should support variables, arithmetic, conditionals, loops, and basic functions, and runs in a VM that executes its bytecode (Exactly what you said). Ideally the language should work to the point where you could write a small program in it. Think a baby version of Python.
 
 
 
