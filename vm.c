@@ -124,6 +124,8 @@ InterpretResult interpret(Chunk* chunk) {
 
 
 void push(Value value) {
+    //should add check here if we are at capcity
+
     //push to the top
     *vm.stackTop = value;
     //increment the pointer
