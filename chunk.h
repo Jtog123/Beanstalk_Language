@@ -10,12 +10,31 @@
                             --------------------- OPCODE --------------------- 
 What instruction are we dealing with?
 */
+
+/*
 enum OpCode {
     OP_CONSTANT,
     OP_RETURN,
 };
+*/
+
+enum OpCode {
+    OP_CONSTANT,
+    OP_ADD,
+    OP_SUBTRACT,
+    OP_MULTIPLY,
+    OP_DIVIDE,
+    OP_NEGATE,
+    OP_RETURN,
+};
 
 
+
+
+// making number 24 bits in the code array in other word 3 bytes.
+// 1 byte OP_CODE + 3 Byte operand
+//Where do we define the size of the operands?
+//where did we define the size of the operand for OP_Constant?
 
 /*
                             --------------------- CHUNK ---------------------
@@ -34,7 +53,11 @@ Chunks will be dynamically doubled in size if the capacity < count + 1, function
 typedef struct {
     int count;
     int capacity;
+
+    // holds instructions
     uint8_t* code;
+    //line information
+    int* lines;
 
     //store the constant values for each Chunk
     ValueArray constants;
@@ -42,7 +65,7 @@ typedef struct {
 } Chunk;
 
 void initChunk(Chunk* chunk);
-void writeChunk(Chunk* chunk, uint8_t byte);
+void writeChunk(Chunk* chunk, uint8_t byte, int line);
 int addConstant(Chunk* chunk, Value value);
 void freeChunk(Chunk* chunk);
 
