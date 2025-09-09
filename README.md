@@ -95,7 +95,7 @@ May not implement garbage collection, entirely time dependent. It will be a dyna
 # Timeline and Milestones
 
 Week 1 - 2:  Build the underlying Chunk data structures needed to hold instructions.\
-Week 2 - 4: Book builds the VM before the lexer, testing hardcoded instructions.\
+Week 2 - 4: Book builds the VM before the scanner, testing hardcoded instructions.\
 Week 4 - 5: Building the scanner.\
 Week 5 - 6: Parsing basic expressions. More dynamic instruction testing.\
 Week 6 - 7: Implementing string, local variables, and global variables by this point.\
