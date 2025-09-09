@@ -73,7 +73,7 @@ fi(a > b){
 Compiler **GENERATES** Bytecode. The Bytecode will be **FED TO** the Virtual Machine
 
 **The Compiler:**\
-Will probably built with 2 seperate components a Scanner and a Parser.
+Will be built with 2 seperate components a Scanner and a Parser.
 The Scanner will form the Tokens, the Parser will consume them and generate bytecode instructions and then feed them to the Virtual Machine.
 
 **The Virtual Machine:**\
