@@ -74,7 +74,7 @@ Compiler **GENERATES** Bytecode. The Bytecode will be **FED TO** the Virtual Mac
 
 **The Compiler:**\
 Will be built with 2 seperate components a Scanner and a Parser.
-The Scanner will form the Tokens, the Parser will consume them and generate bytecode instructions and then feed them to the Virtual Machine.
+The Scanner will form the Tokens, the Parser will consume them and check them against the grammar, then generate bytecode instructions (OPCODES) and then feed them to the Virtual Machine.
 
 **The Virtual Machine:**\
 A virtual machine is essentially a CPU written at the software level. To keep Beanstalk architecture independent we need to write a basic emualtor that understands Beanstalks instruction set.
