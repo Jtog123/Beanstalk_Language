@@ -35,7 +35,7 @@ Pure C and github. NO DEPENDENCIES.
 2. Strings
 3. Global Variables
 4. Local Variables
-5. If (fi) statements, while loops, for (fo) statements
+5. If (fi) statements, while loops, for (fo) loops
 6. Functions (Fum)
 7. Classes (Fee)
 8. Garbage Collection?
