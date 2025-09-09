@@ -81,7 +81,7 @@ A virtual machine is essentially a CPU written at the software level. To keep Be
 The virtual machine will contain an instruction pointer and perfrom the basic duties of a real CPU. It will **fetch an instruction**,**decode said instruction**, then **execute said instruction** . Repeat.
 
 **Bytecode over Machine Code:**\
-Machine code is much faster, but it's also architecture dependent. In other words if we wanted Beanstalk to compile directly to machine code on both Windows and Mac I would need seperate builds for Intel and ARM chips. 
+Machine code is much faster, but it's also architecture dependent.
 
 By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it. Although the code generated won't be as fast as machine code we avoid the headache of cross compiling on different architectures, while also achieving portability.
 
