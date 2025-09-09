@@ -46,7 +46,7 @@ OOP (Object Oriented Programming) languages come with a few key language feature
 Typically in most languages they would be defined something like this:
 
 class Object;\
-int functionName {};\
+function functionName {};\
 for(int i = 0; i < conditionall; i++);\
 if(conditional);
 
