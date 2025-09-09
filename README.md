@@ -17,7 +17,7 @@ My motivation for the project stemmed from wanting a better understanding of how
 
 The purpose of the project is to build a language from scratch. I take many language features for granted so by building out the feature one by one I hope to solidify my understanding of how they truly work.
 
-The inspiration for the name comes from the old English fairy tale "Jack and the Beanstalk".
+The inspiration for the name comes from the old English story "Jack and the Beanstalk".
 
 # Background and Research
 
