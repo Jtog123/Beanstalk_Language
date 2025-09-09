@@ -9,7 +9,7 @@ I’ll grind his bones to make my bread.”
 
 # Overview
 
-Beanstalk will be a general purpose, interpreted programming language written in C. Since the language is interpreted, meaning all instructions are executed one by one as the program is running. The language will contain most modern language features, like functions and classes. Some syntax will differ from most modern languages for pure differentiation. 
+Beanstalk will be a general purpose, interpreted programming language written in C. The language is interpreted, meaning all instructions are executed one by one as the program is running. The language will contain most modern language features, like functions and classes. Some syntax will differ from most modern languages for pure differentiation. 
 
 # Motivation and Purpose
 
