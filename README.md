@@ -103,7 +103,7 @@ Week 7 - 9 if (fi) statements, While statements, (fo) for statements, also (fum)
 Week 9 - Will update this as I go.
 
 # Success Criteria
-At a minimum Beanstalk should support variables, arithmetic, conditionals, loops, and basic functions, and runs in a VM that executes its bytecode (Exactly what you said). Ideally the language should work to the point where you could write a small program in it. Think a baby version of Python.
+At a minimum Beanstalk should support variables, arithmetic, conditionals, loops, and basic functions, and runs in a VM that executes its bytecode. Ideally the language should work to the point where you could write a small program in it. Think a baby version of Python.
 
 
 
