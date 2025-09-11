@@ -90,7 +90,7 @@ For example if the virtual machine reads in an instruction OP_RETURN. The virtua
 
 # Project Scope and Limitations
 
-May not implement garbage collection, entirely time dependent. It will be a interpreted language so no declaring explicit types like Ints or doubles, data types will instead be inferred by the compiler.
+May not implement garbage collection, entirely time dependent. It will be a interpreted language so no declaring explicit types like Ints or doubles, data types will instead be inferred by the interpreter.
 
 # Timeline and Milestones
 
