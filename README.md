@@ -15,7 +15,7 @@ Beanstalk will be a general purpose, interpreted programming language written in
 
 My motivation for the project stemmed from wanting a better understanding of how programming languages work under the hood. Most modern languages are highly abstracted, and while abstractions come with many benefits to programmers, I believe abstractions can make it harder to grasp your computer science fundamentals. Fundamentals like understanding memory management or how our programs are actually running.
 
-The purpose of the project is to build a language from scratch. I take many language features for granted so by building out the feature one by one I hope to solidify my understanding of how they truly work.
+The purpose of the project is to build a small language from scratch. I take many language features for granted so by building out the feature one by one I hope to solidify my understanding of how they truly work.
 
 The inspiration for the name comes from the old English story "Jack and the Beanstalk".
 
