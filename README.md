@@ -83,7 +83,7 @@ The virtual machine will contain an instruction pointer and perfrom the basic du
 **Bytecode over Machine Code:**\
 Machine code is much faster, but it's also architecture dependent.
 
-By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it. Although the code generated won't be as fast as machine code we avoid the headache of cross compiling on different architectures, while also achieving portability.
+By using bytecode we avoid seperate builds and generate an architecture neutral representation and then let the virtual machine translate it. Although the code generated won't be as fast as machine code we can achieve better portability.
 
 You can think of the Bytecode as instructions for the Virtual Machine. They tell the virtual machine what operations to perform when we encounter a certain instruction.
 For example if the virtual machine reads in an instruction OP_RETURN. The virtual machine will know that this means its time to return from a function, and it will execute that behaviour. Byetcode can also be more formally known as an **intermediate representation**.
