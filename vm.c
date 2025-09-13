@@ -1,6 +1,7 @@
 #include "commonlibs.h"
 #include "vm.h"
 #include "debug.h"
+#include "compiler.h"
 #include <stdio.h>
 
 //Global variable, when implementing vm functions prevents us from having to pass a pointer to a VM in every function
@@ -110,21 +111,14 @@ static InterpretResult run() {
 
 
 
-InterpretResult interpret(Chunk* chunk) {
-    // store the chunk in the virtual machine
-    vm.chunk = chunk;
-
-    //Set the instruction pointer to the first byte in the bytecode array, points to instruction ABOUT to be executed
-    vm.ip = vm.chunk->code;
-
-    //Begin running the VM
-    return run();
-
+InterpretResult interpret(const char* source) {
+    compile(source);
+    return INTERPRET_OK;
 }
 
 
 void push(Value value) {
-    //should add check here if we are at capcity
+    //should add check here if we are at capcity, then grow dynamically
 
     //push to the top
     *vm.stackTop = value;
