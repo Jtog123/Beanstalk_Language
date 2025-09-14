@@ -6,7 +6,7 @@
 #include "string.h"
 #include "vm.h"
 
-//Read Evaluate Print Loop
+
 static void repl() {
     char line[1024];
     for(;;) {
@@ -49,7 +49,7 @@ static char* readFile(const char* path) {
         fprintf(stderr, "Could not read file \"%s\".\n", path);
         exit(74);
     }
-    
+
     buffer[bytesRead] = '\0';
     fclose(file);
     return buffer;
