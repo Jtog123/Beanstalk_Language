@@ -18,6 +18,12 @@ void initScanner(const char* source) {
     scanner.line = 1;
 }
 
+static bool isAlpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+            (c >= 'A' && c <= 'Z') ||
+            c == '_';
+}
+
 static bool isDigit(char c) {
     return c >= '0' && c <= '9';
 }
@@ -102,6 +108,33 @@ static void skipWhitespace() {
     }
 }
 
+static TokenType checkKeyword(int start, int length, const char* rest, TokenType type) {
+    if(scanner.current - scanner.start == start + length && memcmp(scanner.start + start, rest, length) == 0) {
+        return type;
+    }
+
+    return TOKEN_IDENTIFIER;
+}
+
+static TokenType identifierType() {
+
+    //DFA or State Machine, on encoutering a potential keyword, we search the rest of the string to validate
+
+    switch(scanner.start[0]) {
+        case 'a': return checkKeyword(1, 2, "nd", TOKEN_AND);
+    }
+
+    return TOKEN_IDENTIFIER;
+}
+
+static Token identifier() {
+    while(isAlpha(peek()) || isDigit(peek())) {
+        advance();
+    }
+
+    return makeToken(identifierType());
+}
+
 static Token string() {
     while(peek() != '"' && !isAtEnd()) {
         if(peek() == '\n') {
@@ -137,6 +170,8 @@ static Token number() {
 
 
 
+
+
 Token scanToken() {
     skipWhitespace();
     scanner.start = scanner.current;
@@ -147,6 +182,10 @@ Token scanToken() {
 
     if(isDigit(c)) {
         return number();
+    }
+
+    if(isAlpha(c)) {
+        return identifier();
     }
 
     switch(c) {
