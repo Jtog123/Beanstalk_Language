@@ -13,8 +13,8 @@ typedef struct {
 Scanner scanner;
 
 void initScanner(const char* source) {
-    scanner.start = NULL;
-    scanner.current = NULL;
+    scanner.start = source;
+    scanner.current = source;
     scanner.line = 1;
 }
 
@@ -108,7 +108,11 @@ static void skipWhitespace() {
     }
 }
 
+//subtracting two pointers in C, the compiler gives the number of elemnts between them
+
 static TokenType checkKeyword(int start, int length, const char* rest, TokenType type) {
+    //do some pointer arithmetic
+    //mpmcmp compares the contents of bytes up to N bytes between first two args, if the content of the memory are equal we return 0
     if(scanner.current - scanner.start == start + length && memcmp(scanner.start + start, rest, length) == 0) {
         return type;
     }
@@ -124,10 +128,12 @@ static TokenType identifierType() {
         case 'a': return checkKeyword(1, 2, "nd", TOKEN_AND);
         case 'e': return checkKeyword(1, 3, "lse", TOKEN_ELSE);
         case 'f':
-            if(scanner.current - scanner.start > 1) {
+            if(scanner.current - scanner.start > 1) { 
+                printf("%s\n", "Printing the delta between characters");
+                printf("%d\n", scanner.current - scanner.start);
                 switch(scanner.start[1]) {
                     case 'e': return checkKeyword(2, 1, "e", TOKEN_FEE_CLASS);
-                    case 'i': return checkKeyword(2, 0, "", TOKEN_FI_IF);
+                    case 'i': return checkKeyword(2, 0, "", TOKEN_FI_IF); // compares 0 bytes
                     case 'o': return checkKeyword(2, 0, "", TOKEN_FO_FOR);
                     case 'u': return checkKeyword(2, 1, "m", TOKEN_FUM_FUN);
                 }
@@ -151,6 +157,7 @@ static TokenType identifierType() {
     return TOKEN_IDENTIFIER;
 }
 
+//Looks from 2nd to n cahracters, first is read in scanToken
 static Token identifier() {
     while(isAlpha(peek()) || isDigit(peek())) {
         advance();
@@ -192,6 +199,27 @@ static Token number() {
     return makeToken(TOKEN_NUMBER);
 }
 
+
+/*
+static char advance() {
+    //inc the pointer
+    scanner.current++;
+    //return the char we just moved past
+    return scanner.current[-1];
+}
+
+static bool isAlpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+            (c >= 'A' && c <= 'Z') ||
+            c == '_';
+}
+
+static bool isDigit(char c) {
+    return c >= '0' && c <= '9';
+}
+
+
+*/
 
 
 

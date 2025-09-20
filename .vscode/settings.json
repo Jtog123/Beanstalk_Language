@@ -3,6 +3,8 @@
         "__bit_reference": "cpp",
         "string": "cpp",
         "__split_buffer": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "vm.h": "c",
+        "system_error": "c"
     }
 }

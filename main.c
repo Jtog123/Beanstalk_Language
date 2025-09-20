@@ -14,6 +14,7 @@ static void repl() {
 
         //fgets reads characters from file stream stores tham in char array (line)
         if(!fgets(line, sizeof(line), stdin)) {
+            printf("breaking\n");
             printf("\n");
             break;
         }
@@ -22,6 +23,7 @@ static void repl() {
     }
 }
 
+// Returns the code as a string, to initially be Scanned
 static char* readFile(const char* path) {
     FILE* file = fopen(path, "rb");
 
@@ -50,6 +52,7 @@ static char* readFile(const char* path) {
         exit(74);
     }
 
+    //add the null terminator so the scanner knows when to stop
     buffer[bytesRead] = '\0';
     fclose(file);
     return buffer;
