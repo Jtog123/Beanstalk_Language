@@ -132,6 +132,7 @@ static TokenType identifierType() {
                 printf("%s\n", "Printing the delta between characters");
                 printf("%d\n", scanner.current - scanner.start);
                 switch(scanner.start[1]) {
+                    case 'a': return checkKeyword(2, 3, "lse", TOKEN_FALSE);
                     case 'e': return checkKeyword(2, 1, "e", TOKEN_FEE_CLASS);
                     case 'i': return checkKeyword(2, 0, "", TOKEN_FI_IF); // compares 0 bytes
                     case 'o': return checkKeyword(2, 0, "", TOKEN_FO_FOR);
