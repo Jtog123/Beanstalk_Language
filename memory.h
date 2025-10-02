@@ -2,6 +2,7 @@
 #define BEANSTALK_MEMORY_H
 
 #include "commonlibs.h"
+#include "object.h"
 
 
 
@@ -19,11 +20,17 @@ The book uses Macros like this:
 
 Macros wil be used as I need to reuse them to dynamically create different types like Ints, Values, structs, etc
 */
+#define ALLOCATE(type, count) \
+    ((type*)reallocate(NULL, 0, sizeof(type) * (count) ))
 
+#define FREE(type, pointer) reallocate(pointer, sizeof(type), 0)
 
 /* This Macro calculates a new capacity based on the current capacity. It doubles the capacity of the chunk when capacity is hit */
 #define GROW_CAPACITY(capacity) \
     ((capacity) < 8 ? 8 : (capacity) * 2)
+
+
+
 
 
 /*
@@ -41,6 +48,7 @@ uint8_t sizeof(type) returns 1 byte
     reallocate(pointer, sizeof(type) * (oldCount), 0)
 
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+void freeObjects();
 
 
 #endif

@@ -1,9 +1,12 @@
 #include "commonlibs.h"
 #include "vm.h"
 #include "debug.h"
+#include "object.h"
+#include "memory.h"
 #include "compiler.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 //Global variable, when implementing vm functions prevents us from having to pass a pointer to a VM in every function
 VM vm;
@@ -25,15 +28,17 @@ static void runtimeError(const char* format , ...) {
     int line = vm.chunk->lines[instruction];
     fprintf(stderr, "[line %d] in script\n", line);
     resetStack();
+    
 
 }
 
 void initVM() {
     resetStack();
+    vm.objects = NULL;
 }
 
 void freeVM() {
-
+    freeObjects();
 }
 
 void push(Value value) {
@@ -67,6 +72,20 @@ static Value peek(int distance) {
 // return true its a falsey value
 static bool isFalsey(Value value) {
     return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
+}
+
+static void concatenate() {
+    ObjString* b = AS_STRING(pop());
+    ObjString* a = AS_STRING(pop());
+
+    int length = a->length + b->length; // calc new length
+    char* chars = ALLOCATE(char, length + 1);
+    memcpy(chars, a->chars, a->length);; //dest,src,length -> copy string a
+    memcpy(chars + a->length, b->chars, b->length); // copy string b into chars
+    chars[length] = '\0';
+
+    ObjString* result = takeString(chars, length);
+    push(OBJ_VAL(result));
 }
 
 
@@ -149,7 +168,18 @@ static InterpretResult run() {
                 break;
             }
             case OP_ADD: {
-                BINARY_OP(NUMBER_VAL, +);
+                if(IS_STRING(peek(0)) && IS_STRING(peek(1))) {
+                    // if top two objects on vm stack are strings concat them
+                    concatenate();
+                }
+                else if(IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+                    double b = AS_NUMBER(pop());
+                    double a = AS_NUMBER(pop());
+                    push(NUMBER_VAL(a + b));
+                } else {
+                    runtimeError("OPerands must be two numbers or two strings");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
                 break;
             }
             case OP_SUBTRACT: {

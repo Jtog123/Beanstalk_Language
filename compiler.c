@@ -189,6 +189,13 @@ static void number() {
     emitConstant(NUMBER_VAL(value));
 }
 
+//parser hits string token call string, +1 and -2 chop off leading and trailing quotes
+//then creates Obj string, puts it in constant table (value array)
+static void string() {
+    printf("DEBUG: String function called\n");
+    emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
+}
+
 static void unary() {
     TokenType operatorType = parser.previous.type;
 
@@ -226,7 +233,7 @@ ParseRule rules[] = {
     [TOKEN_LESS] = {NULL, binary, PREC_COMPARISON},
     [TOKEN_LESS_EQUAL] = {NULL, binary, PREC_COMPARISON},
     [TOKEN_IDENTIFIER] = {NULL, NULL, PREC_NONE},
-    [TOKEN_STRING] = {NULL, NULL, PREC_NONE},
+    [TOKEN_STRING] = {string, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {number, NULL, PREC_NONE},
     [TOKEN_AND] = {NULL, NULL, PREC_NONE},
     [TOKEN_FEE_CLASS] = {NULL, NULL, PREC_NONE},

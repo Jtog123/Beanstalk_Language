@@ -172,10 +172,11 @@ static Token string() {
         if(peek() == '\n') {
             scanner.line++;
         }
-        if(isAtEnd()) {
-            return errorToken("ERROR: Unterminated String");
-        }
-
+        advance();
+    }
+    
+    if(isAtEnd()) {
+        return errorToken("ERROR: Unterminated String");
     }
 
     //found the closing, push it forward
