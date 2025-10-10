@@ -4,6 +4,7 @@
 #include "memory.h"
 #include "object.h"
 #include "value.h"
+#include "table.h"
 #include "vm.h"
 
 #define ALLOCATE_OBJ(type, objectType) \
@@ -19,25 +20,47 @@ static Obj* allocateObject(size_t size, ObjType type) {
     return object;
 }
 
-static ObjString* allocateString(char* chars, int length) {
-    ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING); // allocate an object of type string
+static ObjString* allocateString(char* chars, int length, uint32_t hash) {
+    ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING); // allocate an object of type string, also implicitly casting Obj* to ObjString*
     string->length = length;
     string->chars = chars;
+    string->hash = hash;
+    tableSet(&vm.strings, string, NIL_VAL);
     return string;
 }
 
+//FNV-1a hash function
+static uint32_t hashString(const char* key, int length) {
+    uint32_t hash = 2166136261u;
+    for(int i = 0 ; i < length; i++) {
+        hash ^= (uint8_t)key[i]; // XOR
+        hash *= 16777619;
+    }
+    return hash;
+}
+
+
 ObjString* takeString(char* chars, int length) {
-    return allocateString(chars,length);
+    uint32_t hash = hashString(chars,length);
+    ObjString* interned = tableFindString(&vm.strings, chars,length,hash);
+    if(interned != NULL) {
+        FREE_ARRAY(chars, chars, length + 1);
+        return interned;
+    }
+    return allocateString(chars,length, hash);
 }
 
 //Allocate an array on heap, just big enough for strings chars
 //copy the contents over into newly allocated array
 //tack on null terminator
 ObjString* copyString(const char* chars, int length) {
+    uint32_t hash = hashString(chars, length);
+    ObjString* interned = tableFindString(&vm.strings, chars, length,hash);
+    if(interned != NULL) return interned;
     char* heapChars = ALLOCATE(char, length + 1);
     memcpy(heapChars, chars, length); // copy (dest, src, amount)
     heapChars[length] = '\0';
-    return allocateString(heapChars, length);
+    return allocateString(heapChars, length, hash);
 }
 
 void printObject(Value value) {

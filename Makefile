@@ -3,7 +3,7 @@ CC = clang
 CFLAGS = -std=c99 -Wall -Wextra -g
 
 # source files
-SOURCES = main.c chunk.c memory.c debug.c value.c vm.c compiler.c scanner.c object.c
+SOURCES = main.c chunk.c memory.c debug.c value.c vm.c compiler.c scanner.c object.c table.c
 OBJECTS = $(SOURCES:.c=.o)
 EXEC = program
 

@@ -29,6 +29,7 @@ struct ObjString {
     Obj obj; // ObjString is an Obj, so needs state all Objs share
     int length;
     char* chars;
+    uint32_t hash;
 };
 
 ObjString* takeString(char* chars, int length);
