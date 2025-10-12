@@ -163,6 +163,21 @@ static InterpretResult run() {
             case OP_POP:
                 pop();
                 break;
+            case OP_GET_GLOBAL: {
+                //var bacon = 5;
+                //get a string like 'bacon' use as a lookup into hashmap
+                //if we can find the key the variable has not been defined, and we throw an error
+                // otherwise we succesfully look up the value and push it onto the stack. (the 5) 
+                ObjString* name = READ_STRING();
+                Value value;
+                if(!tableGet(&vm.globals, name, &value)) {
+                    runtimeError("Undefined variable '%s'.", name->chars);
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                //value gets written in tableGet()
+                push(value);
+                break;
+            }
             case OP_DEFINE_GLOBAL: {
                 //var bacon = 5, "bacon" store in chunks values array, we grab it
                 ObjString* name = READ_STRING();

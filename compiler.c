@@ -212,6 +212,15 @@ static void string() {
     emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
 }
 
+static void namedVariable(Token name) {
+    uint8_t arg = identifierConstant(&name);
+    emitBytes(OP_GET_GLOBAL, arg);
+}
+
+static void variable() {
+    namedVariable(parser.previous);
+}
+
 static void unary() {
     TokenType operatorType = parser.previous.type;
 
@@ -248,7 +257,7 @@ ParseRule rules[] = {
     [TOKEN_GREATER_EQUAL] = {NULL, binary, PREC_COMPARISON},
     [TOKEN_LESS] = {NULL, binary, PREC_COMPARISON},
     [TOKEN_LESS_EQUAL] = {NULL, binary, PREC_COMPARISON},
-    [TOKEN_IDENTIFIER] = {NULL, NULL, PREC_NONE},
+    [TOKEN_IDENTIFIER] = {variable, NULL, PREC_NONE},
     [TOKEN_STRING] = {string, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {number, NULL, PREC_NONE},
     [TOKEN_AND] = {NULL, NULL, PREC_NONE},
@@ -277,84 +286,6 @@ ParseRule rules[] = {
 static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
 }
-
-static void varDeclaration() {
-    //parseVariable() -> identifierConstant(), gets returned an index of the constant in the hash map
-    uint8_t global = parseVariable("Expect a variable name.");
-
-    //if variable has a value assign it, or give it a Nil value
-    if(match(TOKEN_EQUAL)) {
-        expression();
-    } else {
-        emitByte(OP_NIL);
-    }
-    //both statements will have a semicolon, so consume
-    consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration");
-
-    defineVariable(global);
-}
-
-static void expressionStatement() {
-    expression(); // start parsing
-    consume(TOKEN_SEMICOLON, "Expect ';' after expression");
-    emitByte(OP_POP);
-}
-
-static void printStatement() {
-    expression();
-    //check if next token is semicolon if it is consume it move pointer forward, if not throw error
-    consume(TOKEN_SEMICOLON, "Expected ';' after value");
-    emitByte(OP_PRINT);
-}
-
-static void synchronize() {
-    parser.panicMode = false;
-
-    while(parser.current.type != TOKEN_EOF) {
-        if(parser.previous.type == TOKEN_SEMICOLON) return;
-
-        switch(parser.current.type) {
-            case TOKEN_FEE_CLASS:
-            case TOKEN_FUM_FUN:
-            case TOKEN_VAR:
-            case TOKEN_FO_FOR:
-            case TOKEN_FI_IF:
-            case TOKEN_WHILE:
-            case TOKEN_PRINT:
-            case TOKEN_RETURN:
-                return;
-
-            default:
-            ; // do nothing
-        }
-
-        advance();
-    }
-}
-
-//if our current token is a var we have a declaration, else we have a statement
-static void declaration() {
-    if(match(TOKEN_VAR)) {
-        varDeclaration();
-    } else {
-        statement();
-    }
-
-    //if we hit a compile error while parsing previous statement
-    if(parser.panicMode) synchronize();
-}
-
-static void statement() {
-    if(match(TOKEN_PRINT)) {
-        printStatement();
-    } else {
-        expressionStatement();
-    }
-}
-
-
-
-
 
 //starts at current token and parses any expression at given precedence level or higher
 static void parsePrecedence(Precedence precedence) {
@@ -397,6 +328,90 @@ static void defineVariable(uint8_t global) {
     //emit the global op code and the index to the current chunk
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
+
+static void expressionStatement() {
+    expression(); // start parsing
+    consume(TOKEN_SEMICOLON, "Expect ';' after expression");
+    emitByte(OP_POP);
+}
+
+static void printStatement() {
+    expression();
+    //check if next token is semicolon if it is consume it move pointer forward, if not throw error
+    consume(TOKEN_SEMICOLON, "Expected ';' after value");
+    emitByte(OP_PRINT);
+}
+
+static void synchronize() {
+    parser.panicMode = false;
+
+    while(parser.current.type != TOKEN_EOF) {
+        if(parser.previous.type == TOKEN_SEMICOLON) return;
+
+        switch(parser.current.type) {
+            case TOKEN_FEE_CLASS:
+            case TOKEN_FUM_FUN:
+            case TOKEN_VAR:
+            case TOKEN_FO_FOR:
+            case TOKEN_FI_IF:
+            case TOKEN_WHILE:
+            case TOKEN_PRINT:
+            case TOKEN_RETURN:
+                return;
+
+            default:
+            ; // do nothing
+        }
+
+        advance();
+    }
+}
+
+static void varDeclaration() {
+    //parseVariable() -> identifierConstant(), gets returned an index of the constant in the hash map
+    uint8_t global = parseVariable("Expect a variable name.");
+
+    //if variable has a value assign it, or give it a Nil value
+    if(match(TOKEN_EQUAL)) {
+        expression();
+    } else {
+        emitByte(OP_NIL);
+    }
+    //both statements will have a semicolon, so consume
+    consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration");
+
+    defineVariable(global);
+}
+
+
+
+//if our current token is a var we have a declaration, else we have a statement
+static void declaration() {
+    if(match(TOKEN_VAR)) {
+        varDeclaration();
+    } else {
+        statement();
+    }
+
+    //if we hit a compile error while parsing previous statement
+    if(parser.panicMode) synchronize();
+}
+
+static void statement() {
+    if(match(TOKEN_PRINT)) {
+        printStatement();
+    } else {
+        expressionStatement();
+    }
+}
+
+
+
+
+
+
+
+
 
 // look up the rules for the operator
 static ParseRule* getRule(TokenType type) {

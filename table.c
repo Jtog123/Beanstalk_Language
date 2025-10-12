@@ -93,7 +93,7 @@ bool tableSet(Table* table, ObjString* key, Value value) {
     Entry* entry = findEntry(table->entries, table->capacity, key);
     bool isNewKey = entry->key == NULL; // is it a new entry?
     if(isNewKey && IS_NIL(entry->value)) table->count++;
-    if(isNewKey) table->count++;
+    //if(isNewKey) table->count++;
 
     entry->key = key;
     entry->value = value;
