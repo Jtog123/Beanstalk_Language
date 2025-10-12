@@ -92,6 +92,18 @@ static void consume(TokenType type, const char* message) {
         advance();
         return;
     }
+    errorAtCurrent(message);
+}
+
+static bool check(TokenType type) {
+    return parser.current.type == type;
+}
+
+//cosume the token if the current token matches the one we pass in
+static bool match(TokenType type) {
+    if(!check(type)) return false;
+    advance();
+    return true;
 }
 
 //append a single byte to a chunk
@@ -139,8 +151,12 @@ static void endCompiler() {
 }
 
 
+
+
 /*FORWARD DECLARATIONS*/
 static void expression();
+static void statement();
+static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 /*--------------------*/
@@ -156,9 +172,9 @@ static void binary() {
         case TOKEN_BANG_EQUAL: emitBytes(OP_EQUAL, OP_NOT); break;
         case TOKEN_EQUAL_EQUAL: emitByte(OP_EQUAL); break;
         case TOKEN_GREATER: emitByte(OP_GREATER); break;
-        case TOKEN_GREATER_EQUAL: emitBytes(OP_LESS, OP_NOT); // logical equivalence check if less thn not the result
+        case TOKEN_GREATER_EQUAL: emitBytes(OP_LESS, OP_NOT); break; // logical equivalence check if less thn not the result
         case TOKEN_LESS: emitByte(OP_LESS); break;
-        case TOKEN_LESS_EQUAL: emitBytes(OP_GREATER, OP_NOT); // logical equivalance check if greater than not the reuslt
+        case TOKEN_LESS_EQUAL: emitBytes(OP_GREATER, OP_NOT); break;// logical equivalance check if greater than not the reuslt
         case TOKEN_PLUS : emitByte(OP_ADD); break;
         case TOKEN_MINUS: emitByte(OP_SUBTRACT); break;
         case TOKEN_STAR: emitByte(OP_MULTIPLY); break;
@@ -262,6 +278,80 @@ static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
 }
 
+static void varDeclaration() {
+    //parseVariable() -> identifierConstant(), gets returned an index of the constant in the hash map
+    uint8_t global = parseVariable("Expect a variable name.");
+
+    //if variable has a value assign it, or give it a Nil value
+    if(match(TOKEN_EQUAL)) {
+        expression();
+    } else {
+        emitByte(OP_NIL);
+    }
+    //both statements will have a semicolon, so consume
+    consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration");
+
+    defineVariable(global);
+}
+
+static void expressionStatement() {
+    expression(); // start parsing
+    consume(TOKEN_SEMICOLON, "Expect ';' after expression");
+    emitByte(OP_POP);
+}
+
+static void printStatement() {
+    expression();
+    //check if next token is semicolon if it is consume it move pointer forward, if not throw error
+    consume(TOKEN_SEMICOLON, "Expected ';' after value");
+    emitByte(OP_PRINT);
+}
+
+static void synchronize() {
+    parser.panicMode = false;
+
+    while(parser.current.type != TOKEN_EOF) {
+        if(parser.previous.type == TOKEN_SEMICOLON) return;
+
+        switch(parser.current.type) {
+            case TOKEN_FEE_CLASS:
+            case TOKEN_FUM_FUN:
+            case TOKEN_VAR:
+            case TOKEN_FO_FOR:
+            case TOKEN_FI_IF:
+            case TOKEN_WHILE:
+            case TOKEN_PRINT:
+            case TOKEN_RETURN:
+                return;
+
+            default:
+            ; // do nothing
+        }
+
+        advance();
+    }
+}
+
+//if our current token is a var we have a declaration, else we have a statement
+static void declaration() {
+    if(match(TOKEN_VAR)) {
+        varDeclaration();
+    } else {
+        statement();
+    }
+
+    //if we hit a compile error while parsing previous statement
+    if(parser.panicMode) synchronize();
+}
+
+static void statement() {
+    if(match(TOKEN_PRINT)) {
+        printStatement();
+    } else {
+        expressionStatement();
+    }
+}
+
 
 
 
@@ -289,6 +379,25 @@ static void parsePrecedence(Precedence precedence) {
 
 }
 
+static uint8_t identifierConstant(Token* name) {
+    // ex var bacon = 5;
+    // sends 'bacon' to chunks constant table as string (HASH map)
+    //it then returns the index of where its located in the constant table
+    return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+}
+
+static uint8_t parseVariable(const char* errorMessage) {
+    //consume the name of thje variable, 'bacon'
+    consume(TOKEN_IDENTIFIER, errorMessage);
+    //grab the string
+    return identifierConstant(&parser.previous);
+}
+
+static void defineVariable(uint8_t global) {
+    //emit the global op code and the index to the current chunk
+    emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
 // look up the rules for the operator
 static ParseRule* getRule(TokenType type) {
     return &rules[type];
@@ -309,8 +418,10 @@ bool compile(const char* source, Chunk* chunk) {
     //primer
     advance();
 
-    expression();
-    consume(TOKEN_EOF, "Expect end of expression.");
+    //Beanstalk is a sequence of declarations
+    while(!match(TOKEN_EOF)) {
+        declaration();
+    }
     endCompiler();
     return !parser.hadError;
 

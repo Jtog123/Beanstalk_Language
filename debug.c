@@ -24,7 +24,7 @@ static int constantInstruction(const char* name, Chunk* chunk, int offset) {
 
     //Chunk has an ValueArray of constants, constants is an array of values, we acces this array at the constant index
     printValue(chunk->constants.values[constant]);
-    printf("'\n");
+    printf("\n");
     //constants are two byte instructions so we need to add 2 to iterate past.
     return offset + 2;
 }
@@ -46,6 +46,8 @@ int disassembleInstruction(Chunk* chunk, int offset) {
     switch(instruction) {
         case OP_RETURN: 
             return simpleInstruction("OP_RETURN", offset);
+        case OP_PRINT:
+            return simpleInstruction("OP_PRINT", offset);
         case OP_CONSTANT:
             return constantInstruction("OP_CONSTANT", chunk, offset);
         case OP_NIL:
@@ -54,6 +56,10 @@ int disassembleInstruction(Chunk* chunk, int offset) {
             return simpleInstruction("OP_TRUE", offset);
         case OP_FALSE:
             return simpleInstruction("OP_FALSE", offset);
+        case OP_POP:
+            return simpleInstruction("OP_POP", offset);
+        case OP_DEFINE_GLOBAL:
+            return constantInstruction("OP_DEFINE_GLOBAL", chunk, offset);
         case OP_EQUAL:
             return simpleInstruction("OP_EQUAL", offset);
         case OP_GREATER:

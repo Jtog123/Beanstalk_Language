@@ -35,10 +35,13 @@ static void runtimeError(const char* format , ...) {
 void initVM() {
     resetStack();
     vm.objects = NULL;
+    initTable(&vm.globals);
     initTable(&vm.strings);
+    
 }
 
 void freeVM() {
+    freeTable(&vm.globals);
     freeTable(&vm.strings);
     freeObjects();
 }
@@ -103,6 +106,9 @@ static InterpretResult run() {
 //READ_BYTE returns the next byte which is an index in the CODE array. This index allows us to index into VALUUES array and retieve the constant
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
 
+//reads 1 byte operand, treats as index into constant table (hashmap), retusns strnig at that index.
+#define READ_STRING() AS_STRING(READ_CONSTANT())
+
 //Boilerplate all binary operations follow this format.
 // make sure the top two items on vm's stack are numbers
 #define BINARY_OP(valueType, op) \
@@ -154,6 +160,20 @@ static InterpretResult run() {
             case OP_FALSE:
                 push(BOOL_VAL(false));
                 break;
+            case OP_POP:
+                pop();
+                break;
+            case OP_DEFINE_GLOBAL: {
+                //var bacon = 5, "bacon" store in chunks values array, we grab it
+                ObjString* name = READ_STRING();
+
+                // pass in the table, key, value at top of the stack.
+                //take value at top of the stack stoer it in hashtable with 'name' as key
+                tableSet(&vm.globals, name, peek(0)); 
+                
+                pop();
+                break;
+            }
             case OP_EQUAL: {
                 Value b = pop();
                 Value a = pop();
@@ -212,10 +232,16 @@ static InterpretResult run() {
                 push(NUMBER_VAL(-AS_NUMBER(pop())));
                 break;
             }
-            case OP_RETURN: {
+            case OP_PRINT: {
                 printValue(pop());
                 printf("\n");
+                break;
+            }
+            case OP_RETURN: {
                 return INTERPRET_OK;
+            //    printValue(pop());
+            //    printf("\n");
+                
             }
 
             //code
@@ -224,6 +250,7 @@ static InterpretResult run() {
 
     //undefine the macros after were done with it
     #undef READ_CONSTANT
+    #undef READ_STRING
     #undef READ_BYTE
     #undef BINARY_OP
 

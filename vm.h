@@ -12,6 +12,7 @@ typedef struct {
     uint8_t* ip;
     Value stack[STACK_MAX]; // pointer to top of stack, points where next item will be pushed
     Value* stackTop;
+    Table globals;
     Table strings;
     Obj* objects;
 } VM;
