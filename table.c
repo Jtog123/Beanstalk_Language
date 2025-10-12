@@ -19,7 +19,8 @@ void freeTable(Table* table) {
     initTable(table);
 }
 
-Entry* findEntry(Table* entries, int capacity, ObjString* key) {
+
+static Entry* findEntry(Entry* entries, int capacity, ObjString* key) {
     //fold the hash code to grab the index to either find or place the entry
     uint32_t index = key->hash % capacity;
     Entry* tombstone = NULL;
@@ -31,7 +32,8 @@ Entry* findEntry(Table* entries, int capacity, ObjString* key) {
                 return tombstone != NULL ? tombstone : entry;
             } else {
                 //found enty
-                if(tombstone == NULL) tombstone = entry;
+                if(tombstone == NULL) 
+                    tombstone = entry;
             }
         } else if(entry->key == key) {
             //found key
@@ -44,6 +46,8 @@ Entry* findEntry(Table* entries, int capacity, ObjString* key) {
 
 
 }
+    
+
 
 bool tableGet(Table* table, ObjString* key, Value* value) {
     if(table->count == 0) return false;
@@ -75,6 +79,7 @@ static void adjustCapacity(Table* table, int capacity) {
         dest->value = entry->value;
         table->count++;
     }
+    FREE_ARRAY(Entry, table->entries, table->capacity);
 
     //assign the table the newly resized variables
     table->entries = entries;
