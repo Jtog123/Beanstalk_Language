@@ -189,6 +189,18 @@ static InterpretResult run() {
                 pop();
                 break;
             }
+            case OP_GET_LOCAL: {
+                //get the index of the value from bytecode
+                uint8_t slot = READ_BYTE();
+                //given that index, push that value to the stacks slot
+                push(vm.stack[slot]);
+                break;
+            }
+            case OP_SET_LOCAL: {
+                uint8_t slot = READ_BYTE();
+                vm.stack[slot] = peek(0);
+                break;
+            }
             case OP_SET_GLOBAL: {
                 ObjString* name = READ_STRING();
                 if(tableSet(&vm.globals, name, peek(0))) {
