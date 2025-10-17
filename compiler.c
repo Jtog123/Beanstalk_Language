@@ -345,7 +345,7 @@ static void expression() {
 }
 
 static void block() {
-    //while we havent hit a right brace or EOF we are in a declaration of dsome kind
+    //while we havent hit a right brace and EOF we are in a declaration of dsome kind
     while(!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
         declaration();
     }
@@ -461,7 +461,7 @@ static uint8_t parseVariable(const char* errorMessage) {
     return identifierConstant(&parser.previous);
 }
 
-static void markInitialized() {
+static void markInitialized() { //change the scope depth of the varaible
     current->locals[current->localCount - 1].depth = current->scopeDepth;
 }
 
