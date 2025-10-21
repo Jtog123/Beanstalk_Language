@@ -70,7 +70,7 @@ static void errorAt(Token* token, const char* message) {
     } else if (token->type == TOKEN_ERROR) {
 
     } else {
-        fprintf(stderr, "at '%.*s'", token->length, token->start);
+        fprintf(stderr, " at '%.*s'", token->length, token->start);
     }
 
     fprintf(stderr, ": %s\n", message);
@@ -131,6 +131,28 @@ static void emitBytes(uint8_t byte1, uint8_t byte2) {
     emitByte(byte2);
 }
 
+static void emitLoop(int loopStart) {
+    emitByte(OP_LOOP);
+
+    // +2 so we can also jump over the size of OP_LOOP instruction
+    int offset = currentChunk()->count - loopStart + 2;
+
+    if(offset > UINT16_MAX) error("Loop body too large");
+
+    emitByte((offset >> 8) & 0xff);
+    emitByte(offset & 0xff);
+}
+
+static int emitJump(uint8_t instruction) {
+    emitByte(instruction);
+    emitByte(0xff); //place holder byte1
+    emitByte(0xff); // placeholder byte2
+
+    //return the index of the first placeholder byte
+    // so we can later overwrite it
+    return currentChunk()->count - 2;
+}
+
 static void emitReturn() {
     emitByte(OP_RETURN);
 }
@@ -144,6 +166,24 @@ static uint8_t makeConstant(Value value) {
     }
 
     return (uint8_t)constant;
+}
+
+static void patchJump(int offset) {
+    // Since we compile the rest of the 'then' block
+    // our count will have increased
+    //calculates how far we need to jump, if condition is false
+
+    int jump = currentChunk()->count - offset - 2;
+
+    if(jump > UINT16_MAX) {
+        error("Too much code to jump over.");
+    }
+
+    //overwriting the chunk higher place holder (upper 8 bits), 
+    //shift 8 bits then mask -> mask(11111111)
+    currentChunk()->code[offset] = (jump >> 8) & 0xff; 
+    //overwiriting the lower place holder, bit masking (lower 8 bits)
+    currentChunk()->code[offset + 1] = jump & 0xff;
 }
 
 static void emitConstant(Value value) {
@@ -192,6 +232,8 @@ static void endScope() {
 static void expression();
 static void statement();
 static void declaration();
+static void or_(bool canAssign);
+static void and_(bool canAssign);
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 static uint8_t identifierConstant(Token* name);
@@ -240,6 +282,17 @@ static void grouping(bool canAssign) {
 static void number(bool canAssign) {
     double value = strtod(parser.previous.start, NULL);
     emitConstant(NUMBER_VAL(value));
+}
+
+static void or_(bool canAssign) {
+    int elseJump = emitJump(OP_JUMP_IF_FALSE);
+    int endJump = emitJump(OP_JUMP);
+
+    patchJump(elseJump);
+    emitByte(OP_POP);
+
+    parsePrecedence(PREC_OR);
+    patchJump(endJump);
 }
 
 //parser hits string token call string, +1 and -2 chop off leading and trailing quotes
@@ -317,7 +370,7 @@ ParseRule rules[] = {
     [TOKEN_IDENTIFIER] = {variable, NULL, PREC_NONE},
     [TOKEN_STRING] = {string, NULL, PREC_NONE},
     [TOKEN_NUMBER] = {number, NULL, PREC_NONE},
-    [TOKEN_AND] = {NULL, NULL, PREC_NONE},
+    [TOKEN_AND] = {NULL, and_, PREC_AND},
     [TOKEN_FEE_CLASS] = {NULL, NULL, PREC_NONE},
     [TOKEN_ELSE] = {NULL, NULL, PREC_NONE},
     [TOKEN_FALSE] = {literal, NULL, PREC_NONE},
@@ -325,7 +378,7 @@ ParseRule rules[] = {
     [TOKEN_FUM_FUN] = {NULL, NULL, PREC_NONE},
     [TOKEN_FI_IF] = {NULL, NULL, PREC_NONE},
     [TOKEN_NIL] = {literal, NULL, PREC_NONE},
-    [TOKEN_OR] = {NULL, NULL, PREC_NONE},
+    [TOKEN_OR] = {NULL, or_, PREC_OR},
     [TOKEN_PRINT] = {NULL, NULL, PREC_NONE},
     [TOKEN_RETURN] = {NULL, NULL, PREC_NONE},
     [TOKEN_SUPER] = {NULL, NULL, PREC_NONE},
@@ -477,10 +530,53 @@ static void defineVariable(uint8_t global) {
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
+static void and_(bool canAssign) {
+    int endJump = emitJump(OP_JUMP_IF_FALSE);
+
+    emitByte(OP_POP);
+    parsePrecedence(PREC_AND);
+
+    patchJump(endJump);
+}
+
 static void expressionStatement() {
     expression(); // start parsing
     consume(TOKEN_SEMICOLON, "Expect ';' after expression");
     emitByte(OP_POP);
+}
+
+static void fiStatement() {
+    //both OP_POPS get written to the bytecode
+    // only 1 OP_POP during runtime will execute due to how we jump, we skip over and carry on
+    // we havent yet passed the chunk off to the VM
+
+    //compile the expression in the if
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after fi.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition.");
+
+    //holdsthe index of the first placeholder byte.
+    int thenJump = emitJump(OP_JUMP_IF_FALSE);
+
+    //pop JUMP_IF_FALSE, when truthy pop here
+    emitByte(OP_POP);
+
+    //compile the rest of the then body, increasing bytecode and distance from placeholder
+    statement();
+
+    //may need to jump the else if true
+    int elseJump = emitJump(OP_JUMP);
+
+
+    //after compiling replace the placeholder bytes offset, with the newly calcuated offset
+    patchJump(thenJump);
+
+    //otherwise pop here
+    emitByte(OP_POP);
+
+    //if condition is false we jump over then branch, ip will land here
+    if(match(TOKEN_ELSE)) statement();
+    patchJump(elseJump);
 }
 
 static void printStatement() {
@@ -488,6 +584,28 @@ static void printStatement() {
     //check if next token is semicolon if it is consume it move pointer forward, if not throw error
     consume(TOKEN_SEMICOLON, "Expected ';' after value");
     emitByte(OP_PRINT);
+}
+
+static void whileStatement() {
+
+    //point we will jump back to in the while loop
+    int loopStart = currentChunk()->count;
+
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after while");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after condition");
+
+    //if false need to jump the entire loop
+    int exitJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+    statement();
+    
+    emitLoop(loopStart);
+
+    //after compiling the body patch the jump, and pop the conditon value
+    patchJump(exitJump);
+    emitByte(OP_POP);
+
 }
 
 static void synchronize() {
@@ -548,12 +666,16 @@ static void declaration() {
 static void statement() {
     if(match(TOKEN_PRINT)) {
         printStatement();
-    } else if(match(TOKEN_LEFT_BRACE)) {
+    } else if (match(TOKEN_FI_IF)) {
+        fiStatement();
+    } else if(match(TOKEN_WHILE)) {
+        whileStatement();
+    }
+    else if(match(TOKEN_LEFT_BRACE)) {
         beginScope();
         block();
         endScope();
-    }
-    else {
+    } else {
         expressionStatement();
     }
 }

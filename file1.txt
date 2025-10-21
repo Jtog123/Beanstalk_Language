@@ -1,0 +1,15 @@
+var c = 5;
+{
+    var a = 12;
+    var b = 13;
+    print a + b + c;
+}
+
+
+fi(c > 5 or c > 8)
+    print "hello";
+else
+    print "goodbye";
+
+
+

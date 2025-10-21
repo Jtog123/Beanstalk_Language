@@ -106,6 +106,10 @@ static InterpretResult run() {
 //READ_BYTE returns the next byte which is an index in the CODE array. This index allows us to index into VALUUES array and retieve the constant
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
 
+//pulls 2 bytes from the chunk and builds a 16bit unsigned int
+#define READ_SHORT() \
+    (vm.ip += 2, (uint16_t)((vm.ip[-2] << 8) | vm.ip[-1]))
+
 //reads 1 byte operand, treats as index into constant table (hashmap), retusns strnig at that index.
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 
@@ -273,6 +277,26 @@ static InterpretResult run() {
                 printf("\n");
                 break;
             }
+            case OP_JUMP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip += offset;
+                break;
+            }
+            case OP_JUMP_IF_FALSE: {
+                uint16_t offset = READ_SHORT();
+                //if the value at the top of the stackis falsey,
+                //skip a specified number of instructions
+                //otherwise continue as normal
+                if(isFalsey(peek(0))) {
+                    vm.ip += offset;
+                }
+                break;
+            }
+            case OP_LOOP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip -= offset;
+                break;
+            }
             case OP_RETURN: {
                 return INTERPRET_OK;
             //    printValue(pop());
@@ -288,6 +312,7 @@ static InterpretResult run() {
     #undef READ_CONSTANT
     #undef READ_STRING
     #undef READ_BYTE
+    #undef READ_SHORT
     #undef BINARY_OP
 
 
