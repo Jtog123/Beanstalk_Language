@@ -238,6 +238,7 @@ static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 static uint8_t identifierConstant(Token* name);
 static int resolveLocal(Compiler* compiler, Token* name);
+static void varDeclaration();
 /*--------------------*/
 
 
@@ -545,6 +546,65 @@ static void expressionStatement() {
     emitByte(OP_POP);
 }
 
+static void foStatement() {
+    //var neds to be scoped to the loop body, so we wrap in a scope
+    beginScope();
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'");
+    
+    //first clause of the loop
+    if(match(TOKEN_SEMICOLON)) {
+        //no initizlizer
+    } else if(match(TOKEN_VAR)) {
+        varDeclaration();
+    } else {
+        expressionStatement();
+    }
+
+    //number of items in the bytecode chunk when we encounter a fo
+    int loopStart = currentChunk()->count;
+
+    //2nd clause of the loop
+    int exitJump = -1;
+    if(!match(TOKEN_SEMICOLON)) {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after loop condition");
+
+        //jump out of the loop of condition is false
+        exitJump = emitJump(OP_JUMP_IF_FALSE);
+        emitByte(OP_POP);
+    }
+
+    //3rd clauseof loop
+
+    if(!match(TOKEN_RIGHT_PAREN)) {
+        //jump into the body
+        int bodyJump = emitJump(OP_JUMP);
+        int incrementStart = currentChunk()->count;
+        expression();
+        emitByte(OP_POP);
+        consume(TOKEN_RIGHT_PAREN, "Expect ')' after clauses.");
+
+        emitLoop(loopStart);
+        loopStart = incrementStart;
+        patchJump(bodyJump);
+    }
+
+
+    //compile the body
+    statement();
+
+    //jump back to the start of the loop
+    emitLoop(loopStart);
+
+    //patching the jump
+    if(exitJump != -1) {
+        patchJump(exitJump);
+        emitByte(OP_POP);
+    }
+
+    endScope();
+}
+
 static void fiStatement() {
     //both OP_POPS get written to the bytecode
     // only 1 OP_POP during runtime will execute due to how we jump, we skip over and carry on
@@ -666,6 +726,8 @@ static void declaration() {
 static void statement() {
     if(match(TOKEN_PRINT)) {
         printStatement();
+    } else if(match(TOKEN_FO_FOR)) {
+        foStatement();
     } else if (match(TOKEN_FI_IF)) {
         fiStatement();
     } else if(match(TOKEN_WHILE)) {

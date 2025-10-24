@@ -1,6 +1,6 @@
-var c = 0;
-while(c < 5)
-    c = c + 1;
-print c;
-
-// c = c + 1 is a statement so thats why the OP_POP is in there
+var c = 6;
+fi(c > 5 and c < 8) {
+    print "hello";
+} else {
+    print "goodbye";  
+}
