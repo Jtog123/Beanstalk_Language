@@ -4,12 +4,29 @@
 #include "chunk.h"
 #include "value.h"
 #include "table.h"
+#include "object.h"
 
-#define STACK_MAX 256
+
+#define FRAMES_MAX 64
+#define STACK_MAX (FRAMES_MAX * UINT8_COUNT)
+//#define STACK_MAX 256
 
 typedef struct {
-    Chunk* chunk;
+    ObjFunction* function;
     uint8_t* ip;
+    Value* slots;
+
+} CallFrame;
+
+typedef struct {
+    //Chunk* chunk;
+    //uint8_t* ip;
+
+    //treat like a stack
+    CallFrame frames[FRAMES_MAX];
+    //number of ongoing function calls
+    int frameCount;
+
     Value stack[STACK_MAX]; // pointer to top of stack, points where next item will be pushed
     Value* stackTop;
     Table globals;

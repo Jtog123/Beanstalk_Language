@@ -1,0 +1,5 @@
+fum areWe() {
+    print "yes";
+}
+
+print areWe;

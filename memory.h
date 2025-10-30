@@ -2,7 +2,7 @@
 #define BEANSTALK_MEMORY_H
 
 #include "commonlibs.h"
-#include "object.h"
+//#include "object.h"
 
 
 
