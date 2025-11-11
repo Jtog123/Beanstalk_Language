@@ -273,6 +273,7 @@ static void varDeclaration();
 static void defineVariable(uint8_t global);
 static void markInitialized();
 static uint8_t parseVariable(const char* errorMessage);
+static uint8_t argumentList();
 /*--------------------*/
 
 
@@ -734,6 +735,22 @@ static void printStatement() {
     emitByte(OP_PRINT);
 }
 
+static void returnStatement() {
+
+    //prevent returning from top level code
+    if(current->type == TYPE_SCRIPT) {
+        error("Can't return from top-level code.");
+    }
+
+    if(match(TOKEN_SEMICOLON)) {
+        emitReturn();
+    } else {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after return value");
+        emitByte(OP_RETURN);
+    }
+}
+
 static void whileStatement() {
 
     //point we will jump back to in the while loop
@@ -820,6 +837,8 @@ static void statement() {
         foStatement();
     } else if (match(TOKEN_FI_IF)) {
         fiStatement();
+    } else if(match(TOKEN_RETURN)){
+        returnStatement();
     } else if(match(TOKEN_WHILE)) {
         whileStatement();
     }

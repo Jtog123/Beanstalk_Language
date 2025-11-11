@@ -1,5 +1,5 @@
-fum areWe() {
-    print "yes";
+fum function1() {
+    return 5;
 }
 
-print areWe;
+print function1();
