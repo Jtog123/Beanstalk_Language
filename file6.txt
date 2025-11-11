@@ -1,0 +1,8 @@
+fum outer() {
+  var x = "outside";
+  fum inner() {
+    print x;
+  }
+  inner();
+}
+outer();

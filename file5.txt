@@ -1,5 +1,5 @@
-fum function1() {
-    return 5;
+fum test() {
+    print "hello";
 }
 
-print function1();
+test();
