@@ -129,8 +129,8 @@ static TokenType identifierType() {
         case 'e': return checkKeyword(1, 3, "lse", TOKEN_ELSE);
         case 'f':
             if(scanner.current - scanner.start > 1) { 
-                printf("%s\n", "Printing the delta between characters");
-                printf("%d\n", scanner.current - scanner.start);
+                //printf("%s\n", "Printing the delta between characters");
+                //printf("%d\n", scanner.current - scanner.start);
                 switch(scanner.start[1]) {
                     case 'a': return checkKeyword(2, 3, "lse", TOKEN_FALSE);
                     case 'e': return checkKeyword(2, 1, "e", TOKEN_FEE_CLASS);

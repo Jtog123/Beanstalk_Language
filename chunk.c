@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include "chunk.h"
+#include "vm.h"
 
 void initChunk(Chunk* chunk) {
     chunk->count = 0;
@@ -39,7 +40,9 @@ void writeChunk(Chunk* chunk, uint8_t byte, int line) {
 //writeConstant(Chunk, value, line)
 
 int addConstant(Chunk* chunk, Value value) {
+    push(value);//for GC
     writeValueArray(&chunk->constants, value);
+    pop(); //for GC
     
     //return the index of the value we just added in the value array;
     return chunk->constants.count - 1;

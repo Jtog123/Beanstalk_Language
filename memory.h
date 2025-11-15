@@ -3,8 +3,7 @@
 
 #include "commonlibs.h"
 //#include "object.h"
-
-
+#include "value.h"
 
 /* -------------------------- MACROS -------------------------- */
 
@@ -48,6 +47,9 @@ uint8_t sizeof(type) returns 1 byte
     reallocate(pointer, sizeof(type) * (oldCount), 0)
 
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+void markObject(Obj* object);
+void markValue(Value value);
+void collectGarbage();
 void freeObjects();
 
 

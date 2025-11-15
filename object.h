@@ -6,6 +6,8 @@
 #include "chunk.h"
 
 
+
+
 //grab type tag from the object
 #define OBJ_TYPE(value)     (AS_OBJ(value)->type)
 
@@ -34,6 +36,7 @@ typedef enum {
 
 struct Obj {
     ObjType type;
+    bool isMarked;
     struct Obj* next;
 };
 

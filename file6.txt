@@ -1,8 +1,13 @@
 fum outer() {
-  var x = "outside";
-  fum inner() {
-    print x;
+  var a = 1;
+  var b = 2;
+  fum middle() {
+    var c = 3;
+    var d = 4;
+    fum inner() {
+      print a + c + b + d;
+    }
   }
-  inner();
 }
+
 outer();
