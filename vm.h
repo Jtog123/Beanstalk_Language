@@ -19,8 +19,6 @@ typedef struct {
 } CallFrame;
 
 typedef struct {
-    //Chunk* chunk;
-    //uint8_t* ip;
 
     //treat like a stack
     CallFrame frames[FRAMES_MAX];
